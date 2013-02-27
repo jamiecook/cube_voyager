@@ -2,8 +2,12 @@ require 'test/unit'
 require 'cube_voyager'
 
 class CubeVoyagerMatrixTest < Test::Unit::TestCase
+  def setup
+    @sample_data_dir = File.join(File.dirname(__FILE__), 'sample_data')
+  end
+
   def test_read_csv
-    mat = CubeVoyager::read_csv_matrix('sample_data/small_matrix.csv')
+    mat = CubeVoyager::read_csv_matrix(File.join(@sample_data_dir, 'small_matrix.csv'))
     assert_kind_of(Array, mat)
     assert_equal(5, mat.size)
     assert_kind_of(Array, mat.first)
