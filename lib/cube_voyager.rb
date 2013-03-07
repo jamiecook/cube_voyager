@@ -1,4 +1,5 @@
-require "cube_voyager/version"
+require 'rubygems'
+require 'cube_voyager/version'
 require 'ffi'
 
 module CubeVoyager
@@ -20,7 +21,7 @@ module CubeVoyager
   end
 
   def self.open_matrix_reader(filename)
-    err_buffer = FFI::MemoryPointer.from_string("-" * 512)
+    err_buffer = FFI::MemoryPointer.from_string('-' * 512)
     handle = MatReaderOpen(filename, err_buffer, 255)
     error_string = err_buffer.read_string.inspect
     raise "Error: Couldn't open #{filename}, because [#{error_string}]"  if handle.null?
