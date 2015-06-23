@@ -13,7 +13,9 @@ end
 
 module CubeVoyager
   extend FFI::Library
-  ffi_lib File.join(File.dirname(__FILE__), 'VoyagerFileAccess.dll')
+  DLL_FILE = File.join(File.dirname(__FILE__), 'VoyagerFileAccess.dll')
+  raise "Couldn't find DLL file #{DLL_FILE}" unless File.exists?(DLL_FILE)
+  ffi_lib DLL_FILE
   #          void* MatReaderOpen(const char *filename, char *errMsg, int errBufLen);
   attach_function :MatReaderOpen,        [ :string, :pointer, :int ],       :pointer
 
@@ -34,7 +36,13 @@ module CubeVoyager
     # filename.gsub('/', '\\')
     handle = MatReaderOpen(filename, err_buffer, 512)
     error_string = err_buffer.read_string.inspect
-    raise "Error: Couldn't open #{filename}, because [#{error_string}]"  if handle.null?
+    if handle.null?
+      puts "There was an error... this could be for many reasons"
+      puts "1) You don't have a licence to run CUBE."
+      puts "2) You do have another machine on the network is using it."
+      puts "3) You do have a licence but your VM is stealing it."
+      raise "Error: Couldn't open #{filename}, because [#{error_string}]"
+    end
     handle
   end
 
