@@ -13,7 +13,7 @@ end
 
 module CubeVoyager
   extend FFI::Library
-  ffi_lib 'd:/bdk/source/cube_voyager/lib/VoyagerFileAccess.dll'
+  ffi_lib File.join(File.dirname(__FILE__), 'VoyagerFileAccess.dll')
   #          void* MatReaderOpen(const char *filename, char *errMsg, int errBufLen);
   attach_function :MatReaderOpen,        [ :string, :pointer, :int ],       :pointer
 
